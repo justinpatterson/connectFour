@@ -12,8 +12,8 @@ public class ConnectFour_GameManager : MonoBehaviour {
 
     public void Awake()
     {
-
-       InitializeGame();
+        InitializeGame();
+        UpdatePlayerNames("Player1", "Player2");
     }
 
     public void InitializeGame()
@@ -87,4 +87,25 @@ public class ConnectFour_GameManager : MonoBehaviour {
         myUI.TriggerWinPopup_Open(player);
         myAudio.PlayMusic(Phase);
     }
+
+
+    public void TriggerPlayerNameChange()
+    {
+        string p1Name = myUI.Start_player1NameField.text;
+        string p2Name = myUI.Start_player2NameField.text;
+        UpdatePlayerNames(p1Name, p2Name);
+    }
+
+    void UpdatePlayerNames(string p1, string p2)
+    {
+        PlayerPrefs.SetString("Player1", p1);
+        PlayerPrefs.SetString("Player2", p2);
+        myUI.Start_player1NameField.text = p1;
+        myUI.Start_player2NameField.text = p2;
+    }
+    string GetPlayerName(string PlayerPrefKey)
+    {
+        return PlayerPrefs.GetString(PlayerPrefKey, "Default_" + PlayerPrefKey);
+    }
+
 }

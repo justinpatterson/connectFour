@@ -13,6 +13,7 @@ public class ConnectFour_UI : MonoBehaviour {
     public GameObject End_Panel;
     public Text End_Panel_Text;
     public GameObject Start_Panel;
+    public InputField Start_player1NameField, Start_player2NameField;
 
 
     public void GenerateBoardUI(int w, int h) {
@@ -62,7 +63,7 @@ public class ConnectFour_UI : MonoBehaviour {
     }
 
     public void TriggerWinPopup_Open(int PlayerNumber) {
-        string s = PlayerNumber == 1 ? "Red" : "Yellow";
+        string s = PlayerNumber == 1 ? PlayerPrefs.GetString("Player1") : PlayerPrefs.GetString("Player2");
         End_Panel_Text.text = s + " Wins!"; 
         End_Panel.SetActive(true);
 
@@ -74,6 +75,5 @@ public class ConnectFour_UI : MonoBehaviour {
     public void TriggerStartScreen(bool active) {
         Start_Panel.SetActive(active);
     }
-
 }
 
