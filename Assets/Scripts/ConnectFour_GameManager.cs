@@ -5,6 +5,7 @@ using UnityEngine;
 public class ConnectFour_GameManager : MonoBehaviour {
     public ConnectFour_Board myBoard;
     public ConnectFour_UI myUI;
+    public ConnectFour_AudioManager myAudio;
     public enum ConnectFour_phases {start, p1turn, p2turn, end}
     public ConnectFour_phases Phase;
 
@@ -21,6 +22,7 @@ public class ConnectFour_GameManager : MonoBehaviour {
         myBoard.Init();
         myUI.TriggerStartScreen(true);
         myUI.TriggerWinPopup_Close();
+        myAudio.PlayMusic(Phase);
        
     }
     public void StartGame() {
@@ -28,6 +30,7 @@ public class ConnectFour_GameManager : MonoBehaviour {
         myUI.GenerateBoardUI(myBoard.width, myBoard.height);
         myUI.boardText.text = myBoard.UpdateBoardDisplay(myBoard.width, myBoard.height);
         Phase = ConnectFour_phases.p1turn;
+        myAudio.PlayMusic(Phase);
     }
  
 
@@ -82,7 +85,6 @@ public class ConnectFour_GameManager : MonoBehaviour {
         Debug.Log("Win:" + player);
         Phase = ConnectFour_phases.end;
         myUI.TriggerWinPopup_Open(player);
+        myAudio.PlayMusic(Phase);
     }
-       
-
-    }
+}

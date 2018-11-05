@@ -16,8 +16,7 @@ public class ConnectFour_UI : MonoBehaviour {
 
 
     public void GenerateBoardUI(int w, int h) {
-        
-            boardGrid.Clear();
+        boardGrid.Clear();
         for (int i = boardGridContainer.transform.childCount - 1; i >= 0; i--) {
             Destroy(boardGridContainer.transform.GetChild(i).gameObject);
         }
@@ -37,20 +36,24 @@ public class ConnectFour_UI : MonoBehaviour {
             if (boardGrid.ContainsKey(v)) {
                 GameObject targetTile = boardGrid[v];
                 int targetPlayer = boardStateReference[v];
-                Color targetColor = Color.grey;
-                if (targetPlayer == 1) { targetColor = Color.red; 
-                    
-                }
-                if (targetPlayer == 2)
+                if (targetTile.GetComponent<ConnectFour_GridElement>())
+                    targetTile.GetComponent<ConnectFour_GridElement>().SetPlayerOwner(targetPlayer);
+                else
                 {
-                    targetColor = Color.yellow;
+                    Color targetColor = Color.white;
+                    if (targetPlayer == 1)
+                    {
+                        targetColor = Color.red;
 
+                    }
+                    if (targetPlayer == 2)
+                    {
+                        targetColor = Color.yellow;
+                    }
+                    targetTile.GetComponent<Image>().color = targetColor;
                 }
-                targetTile.GetComponent<Image>().color = targetColor;
             }
-
         }
-
     }
     public void UpdatePlayerTurnIndicator(int Currentplayer) {
         PlayerTurnIndicator.sprite = PlayerTurnSprites[Currentplayer];
@@ -67,7 +70,6 @@ public class ConnectFour_UI : MonoBehaviour {
     }
     public void TriggerWinPopup_Close() {
         End_Panel.SetActive(false);
-
     }
     public void TriggerStartScreen(bool active) {
         Start_Panel.SetActive(active);
