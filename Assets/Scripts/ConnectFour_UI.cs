@@ -14,7 +14,8 @@ public class ConnectFour_UI : MonoBehaviour {
     public Text End_Panel_Text;
     public GameObject Start_Panel;
     public InputField Start_player1NameField, Start_player2NameField;
-
+    public Slider bestOfSlider;
+    public Text bestOfLabel;
 
     public void GenerateBoardUI(int w, int h) {
         boardGrid.Clear();
@@ -74,6 +75,16 @@ public class ConnectFour_UI : MonoBehaviour {
     }
     public void TriggerStartScreen(bool active) {
         Start_Panel.SetActive(active);
+    }
+
+    public void ReportNewBestOfValue()
+    {
+        int value = (int) bestOfSlider.value;
+        int valueMod2 = value % 2;
+        if (valueMod2 == 0) value = value + 1;
+        bestOfSlider.value = (float) value;
+        bestOfLabel.text = "BEST OF: " + value.ToString();
+
     }
 }
 
