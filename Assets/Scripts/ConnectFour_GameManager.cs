@@ -6,7 +6,7 @@ public class ConnectFour_GameManager : MonoBehaviour {
     public ConnectFour_Board myBoard;
     public ConnectFour_UI myUI;
     public ConnectFour_AudioManager myAudio;
-    public enum ConnectFour_phases {start, p1turn, p2turn, end}
+    public enum ConnectFour_phases {start, p1turn, p2turn, end, nextRound}
     public ConnectFour_phases Phase;
 
 
@@ -23,14 +23,32 @@ public class ConnectFour_GameManager : MonoBehaviour {
         myUI.TriggerStartScreen(true);
         myUI.TriggerWinPopup_Close();
         myAudio.PlayMusic(Phase);
-       
     }
+
+    public void TriggerNextRound()
+    {
+        Phase = ConnectFour_phases.nextRound;
+        myBoard.Init();
+        myUI.TriggerStartScreen(false);
+        myUI.TriggerWinPopup_Close();
+        myUI.GenerateBoardUI(myBoard.width, myBoard.height);
+        myUI.boardText.text = myBoard.UpdateBoardDisplay(myBoard.width, myBoard.height);
+
+        Phase = ConnectFour_phases.p1turn;
+        myAudio.PlayMusic(Phase);
+    }
+
     public void StartGame() {
         myUI.TriggerStartScreen(false);
         myUI.GenerateBoardUI(myBoard.width, myBoard.height);
         myUI.boardText.text = myBoard.UpdateBoardDisplay(myBoard.width, myBoard.height);
         Phase = ConnectFour_phases.p1turn;
         myAudio.PlayMusic(Phase);
+
+        //reset 
+        PlayerPrefs.SetInt("Player1Score", 0);
+        PlayerPrefs.SetInt("Player2Score", 0);
+        //PlayerPrefs.GetInt("BestOf");
     }
  
 
@@ -82,6 +100,13 @@ public class ConnectFour_GameManager : MonoBehaviour {
 
             }
     public void TriggerWin(int player) {
+        
+
+
+        string playerPrefKey = "Player" + player.ToString() + "Score";
+        int currentPlayerPrefValue = PlayerPrefs.GetInt(playerPrefKey);
+        PlayerPrefs.SetInt(playerPrefKey, currentPlayerPrefValue + 1);
+
         Debug.Log("Win:" + player);
         Phase = ConnectFour_phases.end;
         myUI.TriggerWinPopup_Open(player);
@@ -106,6 +131,11 @@ public class ConnectFour_GameManager : MonoBehaviour {
     string GetPlayerName(string PlayerPrefKey)
     {
         return PlayerPrefs.GetString(PlayerPrefKey, "Default_" + PlayerPrefKey);
+    }
+
+    public void ReportNewBestOfValue(int count)
+    {
+        PlayerPrefs.SetInt("BestOf", count);
     }
 
 }

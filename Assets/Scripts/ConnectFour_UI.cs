@@ -16,6 +16,7 @@ public class ConnectFour_UI : MonoBehaviour {
     public InputField Start_player1NameField, Start_player2NameField;
     public Slider bestOfSlider;
     public Text bestOfLabel;
+    public ConnectFour_GameManager myGameManager;
 
     public void GenerateBoardUI(int w, int h) {
         boardGrid.Clear();
@@ -65,26 +66,41 @@ public class ConnectFour_UI : MonoBehaviour {
 
     public void TriggerWinPopup_Open(int PlayerNumber) {
         string s = PlayerNumber == 1 ? PlayerPrefs.GetString("Player1") : PlayerPrefs.GetString("Player2");
-        End_Panel_Text.text = s + " Wins!"; 
+
+        int p1Score = PlayerPrefs.GetInt("Player1Score");
+        int p2Score = PlayerPrefs.GetInt("Player2Score");
+        string appendBestOf = "";
+        if (PlayerNumber == 1) appendBestOf = "\n" + p1Score.ToString() + " OUT OF " + PlayerPrefs.GetInt("BestOf");
+        else appendBestOf = "\n" + p2Score.ToString() + " OUT OF " + PlayerPrefs.GetInt("BestOf");
+
+        End_Panel_Text.text = s + " Wins!" + appendBestOf; 
         End_Panel.SetActive(true);
 
 
     }
-    public void TriggerWinPopup_Close() {
+    public void TriggerWinPopup_Close() 
+    {
         End_Panel.SetActive(false);
     }
-    public void TriggerStartScreen(bool active) {
+    public void TriggerStartScreen(bool active) 
+    {
         Start_Panel.SetActive(active);
     }
 
-    public void ReportNewBestOfValue()
+    public void TriggerNewBestOfValue()
     {
         int value = (int) bestOfSlider.value;
         int valueMod2 = value % 2;
         if (valueMod2 == 0) value = value + 1;
         bestOfSlider.value = (float) value;
         bestOfLabel.text = "BEST OF: " + value.ToString();
+        myGameManager.ReportNewBestOfValue(value);
 
+    }
+
+    public void TriggerNextRound() 
+    {
+        
     }
 }
 
